@@ -1,5 +1,6 @@
 package com.bogdanov.project.hospital_admission.security;
 
+import com.bogdanov.project.hospital_admission.exceptions.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

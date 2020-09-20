@@ -1,16 +1,18 @@
-package com.bogdanov.project.hospital_admission.security;
+package com.bogdanov.project.hospital_admission.exceptions;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 
 @Getter
-public class JwtAuthenticationException extends AuthenticationException {
+public class SuchUserExists extends AuthenticationException {
     private HttpStatus httpStatus;
-    public JwtAuthenticationException(String msg) {
+
+    public SuchUserExists(String msg) {
         super(msg);
     }
-    public JwtAuthenticationException(String msg, HttpStatus httpStatus) {
+
+    public SuchUserExists(String msg, HttpStatus httpStatus) {
         super(msg);
         this.httpStatus = httpStatus;
     }
