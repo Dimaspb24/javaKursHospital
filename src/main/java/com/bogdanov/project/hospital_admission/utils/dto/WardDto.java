@@ -7,11 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 @Data
-public class PersonDto {
+public class WardDto {
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String patherName;
-    private String diagnosisName;
-    private String wardName;
+    private String name;
+    private Integer maxCount;
+//    private Set<PersonDto> persons;
 }

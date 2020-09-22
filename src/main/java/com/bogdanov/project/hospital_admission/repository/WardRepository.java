@@ -1,12 +1,12 @@
 package com.bogdanov.project.hospital_admission.repository;
 
-import com.bogdanov.project.hospital_admission.model.User;
+import com.bogdanov.project.hospital_admission.model.Ward;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+public interface WardRepository extends JpaRepository<Ward, Long> {
+    Optional<Ward> findByName(String name);
 }
