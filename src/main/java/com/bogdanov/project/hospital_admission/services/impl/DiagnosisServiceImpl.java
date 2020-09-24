@@ -42,22 +42,37 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     @Override
-    public Set<DiagnosisDto> findAll() {
+    public List<DiagnosisDto> findAll() {
         return diagnosisRepository.findAll()
                 .stream()
                 .map(DiagnosisConverter::toDiagnosisDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
     public DiagnosisDto saveDiagnosis(DiagnosisDto diagnosis) {
-        Diagnosis diagnosisToSave = DiagnosisConverter.toDiagnosis(diagnosis);
-        Diagnosis thatDiagnosis = diagnosisRepository.save(diagnosisToSave);
-        return DiagnosisConverter.toDiagnosisDto(thatDiagnosis);
+        Optional<Diagnosis> foundDiagnosis = diagnosisRepository.findByName(diagnosis.getName());
+        if (foundDiagnosis.isEmpty()) {
+            Diagnosis diagnosisToSave = DiagnosisConverter.toDiagnosis(diagnosis);
+            Diagnosis thatDiagnosis = diagnosisRepository.save(diagnosisToSave);
+            return DiagnosisConverter.toDiagnosisDto(thatDiagnosis);
+        } else {
+            Diagnosis changedDiagnosis = foundDiagnosis.get();
+            changedDiagnosis.setName(diagnosis.getName());
+            return DiagnosisConverter.toDiagnosisDto(changedDiagnosis);
+        }
     }
 
     @Override
     public void deleteById(Long id) {
         diagnosisRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByName(String name) {
+        Optional<Diagnosis> diagnosis = diagnosisRepository.findByName(name);
+        if (!diagnosis.isEmpty()) {
+            diagnosisRepository.delete(diagnosis.get());
+        }
     }
 }

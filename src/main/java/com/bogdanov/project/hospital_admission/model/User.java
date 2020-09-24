@@ -2,11 +2,15 @@ package com.bogdanov.project.hospital_admission.model;
 
 import com.bogdanov.project.hospital_admission.model.enums.Role;
 import com.bogdanov.project.hospital_admission.model.enums.Status;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {

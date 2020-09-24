@@ -4,10 +4,15 @@ import com.bogdanov.project.hospital_admission.model.User;
 import com.bogdanov.project.hospital_admission.model.enums.Role;
 import com.bogdanov.project.hospital_admission.model.enums.Status;
 import com.bogdanov.project.hospital_admission.repository.UserRepository;
+import com.bogdanov.project.hospital_admission.utils.converters.UserConverter;
 import com.bogdanov.project.hospital_admission.utils.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServicesImpl {
@@ -34,5 +39,41 @@ public class UserServicesImpl {
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
         return userRepository.save(user);
+    }
+
+    public List<UserDto> getUsers() {
+        List<UserDto> users = userRepository.findAll()
+                .stream()
+                .map(UserConverter::toUserDto)
+                .collect(Collectors.toList());
+        return users;
+    }
+
+//    public UserDto getUserById(Long id) {
+//        User user = userRepository.getOne(id);
+//        return UserConverter.toUserDto(user);
+//    }
+
+    public UserDto getUserByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        return UserConverter.toUserDto(user.get());
+    }
+
+    public UserDto editUser(UserDto userDto) {
+        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+        if (user.isEmpty()) return null;
+        User userBd = user.get();
+
+        String newPassword = userDto.getPassword();
+        if (newPassword != null && !newPassword.equals("")) {
+            userBd.setPassword(passwordEncoder.encode(newPassword));
+        }
+        userBd.setFirstName(userDto.getFirstName());
+        userBd.setLastName(userDto.getLastName());
+        userBd.setRole(Role.valueOf(userDto.getRole()));
+        userBd.setStatus(Status.valueOf(userDto.getStatus()));
+
+        User saved = userRepository.save(userBd);
+        return UserConverter.toUserDto(saved);
     }
 }

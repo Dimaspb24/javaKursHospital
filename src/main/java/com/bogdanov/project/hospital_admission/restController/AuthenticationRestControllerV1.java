@@ -60,9 +60,10 @@ public class AuthenticationRestControllerV1 {
     }
 
     @PostMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /*регистрация*/
