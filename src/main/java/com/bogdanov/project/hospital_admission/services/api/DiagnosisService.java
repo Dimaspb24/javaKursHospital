@@ -9,11 +9,13 @@ public interface DiagnosisService {
 
     DiagnosisDto findById(Long id);
 
-    List<DiagnosisDto> findByName(String name);
+    DiagnosisDto findByName(String name);
+
+    List<DiagnosisDto> findByNameContaining(String name);
 
     List<DiagnosisDto> findAll();
 
-    DiagnosisDto saveDiagnosis(DiagnosisDto diagnosis);
+    DiagnosisDto saveOrUpdateDiagnosis(DiagnosisDto diagnosis);
 
     void deleteById(Long id);
 

@@ -1,19 +1,18 @@
 package com.bogdanov.project.hospital_admission.services.api;
 
-import com.bogdanov.project.hospital_admission.model.Person;
 import com.bogdanov.project.hospital_admission.utils.dto.PersonDto;
 
-import java.util.Set;
+import java.util.List;
 
 public interface PersonService {
 
     PersonDto findById(Long id);
 
-    Set<PersonDto> findByLikeName(String name);
+    List<PersonDto> findByLikeName(String name);
 
-    Set<PersonDto> findAll();
+    List<PersonDto> findAll();
 
-    PersonDto savePerson(PersonDto person);
+    PersonDto saveOrUpdatePerson(PersonDto person);
 
     void deleteById(Long id);
 }

@@ -20,9 +20,9 @@ public class Diagnosis {
     @NonNull
     @Column(name = "name", nullable = false)
     private String name;
-
+//
 //    @NonNull
-//    @OneToMany(mappedBy = "diagnosis", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @OneToMany(mappedBy = "diagnosis", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    private Set<Person> persons;
 //
 //    public void addPerson(Person person) {

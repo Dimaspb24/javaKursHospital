@@ -1,11 +1,8 @@
 package com.bogdanov.project.hospital_admission.model;
 
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @RequiredArgsConstructor
@@ -30,9 +27,9 @@ public class Ward {
     private Integer maxCount;
 
     /*при разрыве отношения Личности с конкретной палатой (мб стоять null или другая палата):
-    * Если указано orphanRemoval = true, отключенный экземпляр Person автоматически удаляется.
-    * Это полезно для очистки зависимых объектов (например, людей),
-    * которые не должны существовать без ссылки от объекта-владельца
+     * Если указано orphanRemoval = true, отключенный экземпляр Person автоматически удаляется.
+     * Это полезно для очистки зависимых объектов (например, людей),
+     * которые не должны существовать без ссылки от объекта-владельца
      * */
 
     //Удаление осиротевших объектов из коллекции
@@ -44,7 +41,6 @@ public class Ward {
 //    @NonNull
 //    @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
 //    private Set<Person> persons;
-//
 //
 //    public void addPerson(Person person) {
 //        persons.add(person);

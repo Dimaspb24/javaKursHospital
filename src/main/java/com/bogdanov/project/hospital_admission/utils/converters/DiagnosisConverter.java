@@ -1,7 +1,7 @@
 package com.bogdanov.project.hospital_admission.utils.converters;
 
-import com.bogdanov.project.hospital_admission.utils.dto.DiagnosisDto;
 import com.bogdanov.project.hospital_admission.model.Diagnosis;
+import com.bogdanov.project.hospital_admission.utils.dto.DiagnosisDto;
 
 public class DiagnosisConverter {
 

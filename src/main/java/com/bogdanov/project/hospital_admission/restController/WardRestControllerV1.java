@@ -1,7 +1,5 @@
 package com.bogdanov.project.hospital_admission.restController;
 
-import com.bogdanov.project.hospital_admission.model.Ward;
-import com.bogdanov.project.hospital_admission.repository.UserRepository;
 import com.bogdanov.project.hospital_admission.services.api.WardService;
 import com.bogdanov.project.hospital_admission.utils.dto.WardDto;
 import org.springframework.http.HttpStatus;
@@ -9,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wards")
@@ -23,8 +21,8 @@ public class WardRestControllerV1 {
 
     @GetMapping
     @PreAuthorize("hasAuthority('user:read')")
-    public ResponseEntity<Set<WardDto>> findAllWards() {
-        Set<WardDto> allWards = wardService.findAll();
+    public ResponseEntity<List<WardDto>> findAllWards() {
+        List<WardDto> allWards = wardService.findAll();
         return new ResponseEntity<>(allWards, HttpStatus.OK);
     }
 
@@ -35,20 +33,20 @@ public class WardRestControllerV1 {
         return new ResponseEntity<>(ward, HttpStatus.OK);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/find/{name}")
     @PreAuthorize("hasAuthority('user:read')")
-    public ResponseEntity<WardDto> findWardByName(@PathVariable String name) {
-        WardDto ward = wardService.findByName(name);
+    public ResponseEntity<List<WardDto>> findWardByName(@PathVariable String name) {
+        List<WardDto> ward = wardService.findByNameContaining(name);
         return new ResponseEntity<>(ward, HttpStatus.OK);
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<WardDto> saveWard(@RequestBody WardDto ward) {
-        return new ResponseEntity<>(wardService.saveWard(ward), HttpStatus.OK);
+        return new ResponseEntity<>(wardService.saveOrUpdate(ward), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<?> deleteWardById(@PathVariable Long id) {
         wardService.deleteById(id);

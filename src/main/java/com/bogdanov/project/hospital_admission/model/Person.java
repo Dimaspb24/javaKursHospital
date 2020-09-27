@@ -1,8 +1,6 @@
 package com.bogdanov.project.hospital_admission.model;
 
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -16,7 +14,7 @@ import javax.persistence.*;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -35,11 +33,11 @@ public class Person {
     /*"name = "Этот параметр объявляет столбец в целевой сущности, который будет использоваться для соединения. */
     @NonNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "diagnosis_fk", nullable = false)
+    @JoinColumn(name = "diagnosis_fk")
     private Diagnosis diagnosis;
 
     @NonNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ward_fk", nullable = false)
+    @JoinColumn(name = "ward_fk")
     private Ward ward;
 }

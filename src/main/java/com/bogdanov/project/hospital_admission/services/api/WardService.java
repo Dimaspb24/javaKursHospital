@@ -1,9 +1,8 @@
 package com.bogdanov.project.hospital_admission.services.api;
 
-import com.bogdanov.project.hospital_admission.model.Ward;
 import com.bogdanov.project.hospital_admission.utils.dto.WardDto;
 
-import java.util.Set;
+import java.util.List;
 
 public interface WardService {
 
@@ -11,9 +10,13 @@ public interface WardService {
 
     WardDto findByName(String name);
 
-    Set<WardDto> findAll();
+    List<WardDto> findByNameContaining(String name);
 
-    WardDto saveWard(WardDto ward);
+    List<WardDto> findAll();
+
+    WardDto saveOrUpdate(WardDto ward);
 
     void deleteById(Long id);
+
+    void deleteByName(String name);
 }

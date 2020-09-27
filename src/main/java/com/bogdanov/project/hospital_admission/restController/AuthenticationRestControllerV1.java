@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -50,8 +49,10 @@ public class AuthenticationRestControllerV1 {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
             User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
             String token = jwtTokenProvider.createToken(request.getEmail(), user.getRole().name());
-            Map<Object, Object> response = new HashMap<>();
-            response.put("email", request.getEmail());
+            HashMap<Object, Object> response = new HashMap<>();
+            response.put("email", user.getEmail());
+            response.put("userName", user.getFirstName() + " " + user.getLastName());
+            response.put("role", user.getRole().name());
             response.put("token", token);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {

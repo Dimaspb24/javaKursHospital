@@ -40,9 +40,16 @@ public class UserRestControllerV1 {
 
     @PostMapping
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<UserDto> editUser(@RequestBody UserDto userDto) {
-        UserDto user = userServices.editUser(userDto);
+    public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto) {
+        UserDto user = userServices.saveOrUpdateUser(userDto);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        userServices.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

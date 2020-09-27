@@ -59,21 +59,30 @@ public class UserServicesImpl {
         return UserConverter.toUserDto(user.get());
     }
 
-    public UserDto editUser(UserDto userDto) {
-        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
-        if (user.isEmpty()) return null;
-        User userBd = user.get();
+    public UserDto saveOrUpdateUser(UserDto userDto) {
+        Optional<User> foundUser = userRepository.findByEmail(userDto.getEmail());
+        if (foundUser.isEmpty()) {
+            User userToSave = UserConverter.toNewUser(userDto);
+            User thatUser = userRepository.save(userToSave);
+            return UserConverter.toUserDto(thatUser);
+        } else {
+            User userBd = foundUser.get();
 
-        String newPassword = userDto.getPassword();
-        if (newPassword != null && !newPassword.equals("")) {
-            userBd.setPassword(passwordEncoder.encode(newPassword));
+            String newPassword = userDto.getPassword();
+            if (newPassword != null && !newPassword.equals("")) {
+                userBd.setPassword(passwordEncoder.encode(newPassword));
+            }
+            userBd.setFirstName(userDto.getFirstName());
+            userBd.setLastName(userDto.getLastName());
+            userBd.setRole(Role.valueOf(userDto.getRole()));
+//            userBd.setStatus(Status.valueOf(userDto.getStatus()));
+
+            User saved = userRepository.save(userBd);
+            return UserConverter.toUserDto(saved);
         }
-        userBd.setFirstName(userDto.getFirstName());
-        userBd.setLastName(userDto.getLastName());
-        userBd.setRole(Role.valueOf(userDto.getRole()));
-        userBd.setStatus(Status.valueOf(userDto.getStatus()));
+    }
 
-        User saved = userRepository.save(userBd);
-        return UserConverter.toUserDto(saved);
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

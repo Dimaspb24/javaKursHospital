@@ -7,7 +7,10 @@ import com.bogdanov.project.hospital_admission.utils.converters.DiagnosisConvert
 import com.bogdanov.project.hospital_admission.utils.dto.DiagnosisDto;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -27,7 +30,14 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     @Override
-    public List<DiagnosisDto> findByName(String name) {
+    public DiagnosisDto findByName(String name) {
+        Optional<Diagnosis> diagnosis = diagnosisRepository.findByName(name);
+        diagnosis.orElseThrow(() -> new NoSuchElementException("There is no ward"));
+        return DiagnosisConverter.toDiagnosisDto(diagnosis.get());
+    }
+
+    @Override
+    public List<DiagnosisDto> findByNameContaining(String name) {
         Optional<List<Diagnosis>> diagnosis = diagnosisRepository.findByNameContaining(name);
 //        diagnosis.orElseThrow(() -> new NoSuchElementException("There is no diagnosis with " + name + " name"));
 
@@ -50,17 +60,20 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     @Override
-    public DiagnosisDto saveDiagnosis(DiagnosisDto diagnosis) {
-        Optional<Diagnosis> foundDiagnosis = diagnosisRepository.findByName(diagnosis.getName());
-        if (foundDiagnosis.isEmpty()) {
+    public DiagnosisDto saveOrUpdateDiagnosis(DiagnosisDto diagnosis) {
+        if (diagnosis.getId() == null) {
             Diagnosis diagnosisToSave = DiagnosisConverter.toDiagnosis(diagnosis);
             Diagnosis thatDiagnosis = diagnosisRepository.save(diagnosisToSave);
             return DiagnosisConverter.toDiagnosisDto(thatDiagnosis);
-        } else {
+        }
+        Optional<Diagnosis> foundDiagnosis = diagnosisRepository.findById(diagnosis.getId());
+        if (foundDiagnosis.isPresent()) {
             Diagnosis changedDiagnosis = foundDiagnosis.get();
             changedDiagnosis.setName(diagnosis.getName());
+            diagnosisRepository.save(changedDiagnosis);
             return DiagnosisConverter.toDiagnosisDto(changedDiagnosis);
         }
+        throw new IllegalArgumentException("Such diagnosis with this id noo exists");
     }
 
     @Override

@@ -5,19 +5,30 @@ import com.bogdanov.project.hospital_admission.utils.dto.WardDto;
 
 public class WardConverter {
 
-    public static Ward fromWardDtoToWard(WardDto wardDto) {
-        return new Ward(wardDto.getId(),
+    public static Ward toWard(WardDto wardDto) {
+        return new Ward(
                 wardDto.getName(),
                 wardDto.getMaxCount()
         );
     }
+//
+//    public static Ward toWard(WardDto wardDto) {
+//        return new Ward(
+//                wardDto.getId(),
+//                wardDto.getName(),
+//                wardDto.getMaxCount(),
+//                wardDto.getPersons().stream().map()
+//        );
+//    }
 
-    public static WardDto fromWardToWardDto(Ward ward) {
+    public static WardDto toWardDto(Ward ward) {
         return new WardDto(
                 ward.getId(),
                 ward.getName(),
                 ward.getMaxCount()
         );
+
+        //                , ward.getPersons().stream().map(PersonConverter::toPersonDto).collect(Collectors.toSet())
     }
 }
 

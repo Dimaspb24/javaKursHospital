@@ -38,19 +38,18 @@ public class DiagnosisRestControllerV1 {
     @GetMapping("/find/{name}")
     @PreAuthorize("hasAuthority('user:read')")
     public ResponseEntity<List<DiagnosisDto>> findByNameDiagnoses(@PathVariable String name) {
-        List<DiagnosisDto> diagnoses = diagnosisService.findByName(name);
+        List<DiagnosisDto> diagnoses = diagnosisService.findByNameContaining(name);
         return new ResponseEntity<>(diagnoses, HttpStatus.OK);
     }
 
 
     @PostMapping
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<DiagnosisDto> saveOrUpdateDiagnosis(@RequestBody DiagnosisDto diagnosis) {
-        DiagnosisDto diagnosisDto = diagnosisService.saveDiagnosis(diagnosis);
-        return new ResponseEntity<>(diagnosisDto, HttpStatus.OK);
+    public ResponseEntity<DiagnosisDto> saveDiagnosis(@RequestBody DiagnosisDto diagnosis) {
+        return new ResponseEntity<>(diagnosisService.saveOrUpdateDiagnosis(diagnosis), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<?> deleteByIdDiagnosis(@PathVariable Long id) {
         diagnosisService.deleteById(id);
