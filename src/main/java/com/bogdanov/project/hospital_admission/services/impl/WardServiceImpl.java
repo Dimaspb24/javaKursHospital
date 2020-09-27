@@ -1,9 +1,13 @@
 package com.bogdanov.project.hospital_admission.services.impl;
 
+import com.bogdanov.project.hospital_admission.model.Person;
 import com.bogdanov.project.hospital_admission.model.Ward;
+import com.bogdanov.project.hospital_admission.repository.PersonRepository;
 import com.bogdanov.project.hospital_admission.repository.WardRepository;
 import com.bogdanov.project.hospital_admission.services.api.WardService;
+import com.bogdanov.project.hospital_admission.utils.converters.PersonConverter;
 import com.bogdanov.project.hospital_admission.utils.converters.WardConverter;
+import com.bogdanov.project.hospital_admission.utils.dto.PersonDto;
 import com.bogdanov.project.hospital_admission.utils.dto.WardDto;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +21,11 @@ import java.util.stream.Collectors;
 public class WardServiceImpl implements WardService {
 
     private final WardRepository wardRepository;
+    private final PersonRepository personRepository;
 
-    public WardServiceImpl(WardRepository wardRepository) {
+    public WardServiceImpl(WardRepository wardRepository, PersonRepository personRepository) {
         this.wardRepository = wardRepository;
+        this.personRepository = personRepository;
     }
 
     @Override
@@ -78,8 +84,18 @@ public class WardServiceImpl implements WardService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        wardRepository.deleteById(id);
+    public List<PersonDto> deleteById(Long id) {
+        Optional<List<Person>> personsWithThisWard = personRepository
+                .findByWardEquals(wardRepository.getOne(id));
+        if (personsWithThisWard.isPresent()) {
+            return personsWithThisWard.get()
+                    .stream()
+                    .map(PersonConverter::toPersonDto)
+                    .collect(Collectors.toList());
+        } else {
+            wardRepository.deleteById(id);
+            return null;
+        }
     }
 
     @Override

@@ -1,10 +1,14 @@
 package com.bogdanov.project.hospital_admission.services.impl;
 
 import com.bogdanov.project.hospital_admission.model.Diagnosis;
+import com.bogdanov.project.hospital_admission.model.Person;
 import com.bogdanov.project.hospital_admission.repository.DiagnosisRepository;
+import com.bogdanov.project.hospital_admission.repository.PersonRepository;
 import com.bogdanov.project.hospital_admission.services.api.DiagnosisService;
 import com.bogdanov.project.hospital_admission.utils.converters.DiagnosisConverter;
+import com.bogdanov.project.hospital_admission.utils.converters.PersonConverter;
 import com.bogdanov.project.hospital_admission.utils.dto.DiagnosisDto;
+import com.bogdanov.project.hospital_admission.utils.dto.PersonDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,9 +22,11 @@ import java.util.stream.Collectors;
 public class DiagnosisServiceImpl implements DiagnosisService {
 
     private final DiagnosisRepository diagnosisRepository;
+    private final PersonRepository personRepository;
 
-    public DiagnosisServiceImpl(DiagnosisRepository diagnosisRepository) {
+    public DiagnosisServiceImpl(DiagnosisRepository diagnosisRepository, PersonRepository personRepository) {
         this.diagnosisRepository = diagnosisRepository;
+        this.personRepository = personRepository;
     }
 
     @Override
@@ -77,8 +83,19 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        diagnosisRepository.deleteById(id);
+    public List<PersonDto> deleteById(Long id) {
+        Optional<List<Person>> personsWithThisWard = personRepository
+                .findByDiagnosisEquals(diagnosisRepository.getOne(id));
+        if (personsWithThisWard.isPresent()) {
+            return personsWithThisWard.get()
+                    .stream()
+                    .map(PersonConverter::toPersonDto)
+                    .collect(Collectors.toList());
+        } else {
+            diagnosisRepository.deleteById(id);
+            return null;
+        }
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.bogdanov.project.hospital_admission.restController;
 
 import com.bogdanov.project.hospital_admission.services.api.WardService;
+import com.bogdanov.project.hospital_admission.utils.dto.PersonDto;
 import com.bogdanov.project.hospital_admission.utils.dto.WardDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +49,8 @@ public class WardRestControllerV1 {
 
     @PostMapping("/{id}")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<?> deleteWardById(@PathVariable Long id) {
-        wardService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<PersonDto>> deleteWardById(@PathVariable Long id) {
+        List<PersonDto> dependentPersons = wardService.deleteById(id);
+        return new ResponseEntity<>(dependentPersons, HttpStatus.OK);
     }
 }

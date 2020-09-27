@@ -2,6 +2,7 @@ package com.bogdanov.project.hospital_admission.services.api;
 
 
 import com.bogdanov.project.hospital_admission.utils.dto.DiagnosisDto;
+import com.bogdanov.project.hospital_admission.utils.dto.PersonDto;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface DiagnosisService {
 
     DiagnosisDto saveOrUpdateDiagnosis(DiagnosisDto diagnosis);
 
-    void deleteById(Long id);
+    List<PersonDto> deleteById(Long id);
 
     void deleteByName(String name);
 }

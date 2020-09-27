@@ -2,6 +2,7 @@ package com.bogdanov.project.hospital_admission.restController;
 
 import com.bogdanov.project.hospital_admission.services.api.DiagnosisService;
 import com.bogdanov.project.hospital_admission.utils.dto.DiagnosisDto;
+import com.bogdanov.project.hospital_admission.utils.dto.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,9 +52,9 @@ public class DiagnosisRestControllerV1 {
 
     @PostMapping("/{id}")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<?> deleteByIdDiagnosis(@PathVariable Long id) {
-        diagnosisService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<PersonDto>> deleteByIdDiagnosis(@PathVariable Long id) {
+        List<PersonDto> dependentPersons = diagnosisService.deleteById(id);
+        return new ResponseEntity<>(dependentPersons, HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
