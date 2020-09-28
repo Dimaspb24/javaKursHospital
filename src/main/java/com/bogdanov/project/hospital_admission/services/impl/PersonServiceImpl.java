@@ -41,7 +41,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonDto> findByLikeName(String name) {
         Optional<List<Person>> persons = personRepository.findByLikeName(name);
-//        person.orElseThrow(() -> new NoSuchElementException("There is no person with name"));
+        persons.orElseThrow(() -> new NoSuchElementException("There is no person with name"));
 
         if (persons.isEmpty()) {
             return new ArrayList<>();

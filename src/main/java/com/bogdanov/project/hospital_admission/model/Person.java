@@ -32,12 +32,12 @@ public class Person {
 
     /*"name = "Этот параметр объявляет столбец в целевой сущности, который будет использоваться для соединения. */
     @NonNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "diagnosis_fk")
     private Diagnosis diagnosis;
 
     @NonNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "ward_fk")
     private Ward ward;
 }
